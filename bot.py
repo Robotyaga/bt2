@@ -1,8 +1,27 @@
 import telebot
 import config
+import requests
+import urllib.request as urllib2
+from bs4 import BeautifulSoup, SoupStrainer
+import random
+from pornhub_api import PornhubApi
+
+api = PornhubApi()
+
+tags = random.sample(api.video.tags("a").tags, 5)
+category = random.choice(api.video.categories().categories)
+result = api.search.search(ordering="mostviewed", tags=tags, category=category)
+
+print(result.size())
+for vid in result.videos:
+    print(vid.url)
 
 bot = telebot.TeleBot(config.TOKEN)
 
+
+@bot.message_handler(commands=['porno'])
+def porno(message):
+    bot.send_message(message.chat.id, vid.url)
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
@@ -16,7 +35,7 @@ def vivtorok1(message):
 	bot.send_message(message.chat.id, "1 пара - Фізика 1.349(Практіка)\n2 пара - Фахова іноземна мова 5.315(Практіка)")
 
 @bot.message_handler(commands=['Середа1'])
-def sereda1(message):
+def sereda1(mesbotrsage):
 	bot.send_message(message.chat.id, "2 пара - ВишМат 8.106(Лекція) \n 3 пара - ОК 4.203(Лекція)\n 4 пара - ВишМат 11.214(Практіка)")
 
 @bot.message_handler(commands=['Четвер1'])
@@ -47,5 +66,8 @@ def chetver2(message):
 def pyatnica2(message):
 	bot.send_message(message.chat.id, "1 пара - ВишМат 11.215(Практіка)\n2 пара - Основи автоматизації обробки інформації 11.421 (Лаба)")
 
+@bot.message_handler(commands=['Бебра'])
+def bebra(message):
+    bot.send_photo(message.chat.id, photo=open('bebra.jpg', 'rb'))
 
 bot.polling(none_stop=True)
